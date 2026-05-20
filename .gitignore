@@ -4,3 +4,5 @@ __pycache__/
 .env
 venv/
 .venv/
+classify_issues_local.py
+classified_issues.csv

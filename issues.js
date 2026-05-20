@@ -89,6 +89,7 @@ function rowToIssue(fields, record) {
 
   const flags = splitTags(raw.flags);
   const labels = splitTags(raw.labels);
+  const extraSkills = splitTags(raw.extra_skills);
   const tagSet = new Set([...flags, ...labels]);
   const createdAt = new Date(raw.created_at);
   const number = Number.parseInt(raw.number, 10) || 0;
@@ -104,6 +105,10 @@ function rowToIssue(fields, record) {
     number,
     flags,
     labels,
+    computeTier: raw.compute_tier || "",
+    issueType: raw.issue_type || "",
+    difficulty: raw.difficulty || "",
+    extraSkills,
     tags: [...tagSet].sort((a, b) => a.localeCompare(b)),
     searchText: [
       raw.repository,
@@ -115,6 +120,10 @@ function rowToIssue(fields, record) {
       raw.number,
       raw.flags,
       raw.labels,
+      raw.compute_tier,
+      raw.issue_type,
+      raw.difficulty,
+      raw.extra_skills,
     ]
       .join(" ")
       .toLowerCase(),
@@ -310,8 +319,18 @@ function renderSummary() {
   const shown = state.filtered.length;
   const goodFirst = state.filtered.filter((issue) => issue.goodFirst).length;
   const repos = new Set(state.filtered.map((issue) => issue.repository)).size;
+  const newestIssue = state.issues.reduce((newest, issue) => {
+    if (Number.isNaN(issue.createdAt.getTime())) {
+      return newest;
+    }
+    if (!newest || issue.createdAt > newest) {
+      return issue.createdAt;
+    }
+    return newest;
+  }, null);
+  const freshness = newestIssue ? ` Newest issue: ${formatDate(newestIssue)}.` : "";
 
-  els.summary.textContent = `Showing ${shown} of ${total} issues across ${repos} repositories. ${goodFirst} marked good first.`;
+  els.summary.textContent = `Showing ${shown} of ${total} issues across ${repos} repositories. ${goodFirst} marked good first.${freshness}`;
 }
 
 function renderChips() {
@@ -361,6 +380,7 @@ function renderRows() {
       goodFirstCell(issue),
       textCell(formatDate(issue.createdAt)),
       textCell(issue.comments.toLocaleString()),
+      classificationCell(issue),
       tagsCell(issue),
     );
     return tr;
@@ -404,6 +424,40 @@ function goodFirstCell(issue) {
   return td;
 }
 
+function classificationCell(issue) {
+  const td = document.createElement("td");
+  const parts = [];
+
+  if (issue.computeTier) {
+    parts.push(`Compute ${issue.computeTier}`);
+  }
+  if (issue.issueType) {
+    parts.push(titleCase(issue.issueType.replaceAll("_", " ")));
+  }
+  if (issue.difficulty) {
+    parts.push(`Difficulty ${issue.difficulty}/5`);
+  }
+
+  if (!parts.length && !issue.extraSkills.length) {
+    td.textContent = "";
+    return td;
+  }
+
+  const summary = document.createElement("div");
+  summary.className = "classification";
+  summary.textContent = parts.join(" · ");
+  td.append(summary);
+
+  if (issue.extraSkills.length) {
+    const skills = document.createElement("div");
+    skills.className = "issue-meta";
+    skills.textContent = `Extra: ${issue.extraSkills.join(", ")}`;
+    td.append(skills);
+  }
+
+  return td;
+}
+
 function tagsCell(issue) {
   const td = document.createElement("td");
   const list = document.createElement("div");
@@ -428,6 +482,10 @@ function tagsCell(issue) {
 
   td.append(list);
   return td;
+}
+
+function titleCase(value) {
+  return value.replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
 function formatDate(date) {

@@ -78,6 +78,17 @@
         </div>
       </section>
 
+      <section class="llm-note" aria-label="LLM notes explanation">
+        <h2>LLM Notes</h2>
+        <p>
+          The GitHub fields come from the issue scrape. The LLM notes are local
+          estimates for triage: (1) compute tier T0 no compute, T1 CPU, T2 free
+          Colab/T4, T3 one large GPU, T4 multi-GPU or specialized hardware;
+          (2) issue type; (3) difficulty 1-5; and (4) extra skills beyond the repository
+          baseline. Treat them as hints, not maintainer labels.
+        </p>
+      </section>
+
       <section class="table-wrap" aria-label="Issues">
         <table>
           <thead>
@@ -86,7 +97,24 @@
               <th>Repo</th>
               <th>Good First</th>
               <th>Created</th>
-              <th>Comments</th>
+              <th>
+                Comments
+                <span class="th-help-wrap">
+                  <button class="th-help" type="button" aria-describedby="commentsHelp">?</button>
+                  <span class="th-tooltip" id="commentsHelp" role="tooltip">
+                    GitHub issue thread comment count.
+                  </span>
+                </span>
+              </th>
+              <th>
+                LLM Notes
+                <span class="th-help-wrap">
+                  <button class="th-help" type="button" aria-describedby="llmHelp">?</button>
+                  <span class="th-tooltip" id="llmHelp" role="tooltip">
+                    LLM estimate: compute tier, issue type, difficulty, and extra skills.
+                  </span>
+                </span>
+              </th>
               <th>Tags</th>
             </tr>
           </thead>

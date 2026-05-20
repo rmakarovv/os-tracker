@@ -1,41 +1,18 @@
 # OS Tracker
 
-A static browser for newcomer-friendly ML and AI open-source issues.
+OS Tracker helps ML and AI learners find newcomer-friendly open-source issues
+without digging through dozens of repositories by hand. It collects promising
+issues into one searchable table and adds lightweight local LLM triage hints so
+contributors can quickly judge fit, difficulty, and likely compute needs.
 
-The site is just:
+## Use the Website
 
-- `index.html`
-- `issues.css`
-- `issues.js`
-- `newcomer_issues.csv`
+Use the search box to filter by issue title, repository, label, or issue
+number. The Good First toggle narrows the table to issues that are or are not
+marked beginner-friendly, and the repository and sort menus help focus the
+list.
 
-## Run Locally
-
-```bash
-python3 -m http.server 8000 --bind 127.0.0.1
-```
-
-Open:
-
-```text
-http://127.0.0.1:8000/
-```
-
-Stop the server with `Ctrl+C`.
-
-## Refresh Data
-
-```bash
-GITHUB_TOKEN=your_token_here python3 list_newcomer_issues.py --output newcomer_issues.csv
-```
-
-## Publish
-
-Enable GitHub Pages for the repository:
-
-1. Settings -> Pages
-2. Source: deploy from branch
-3. Branch: `main`
-4. Folder: `/root`
-
-The included GitHub Actions workflow can refresh `newcomer_issues.csv` daily.
+Use Include Tag and Exclude Tag to add label-based filters. Issue titles open
+the original GitHub issue in a new tab. The Comments column shows the GitHub
+thread count, while LLM Notes are local triage hints for likely compute needs,
+issue type, difficulty, and extra skills.
