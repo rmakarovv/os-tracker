@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Newcomer ML Issues</title>
+    <link rel="stylesheet" href="issues.css">
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <h1>Newcomer ML Issues</h1>
+          <p id="summary">Loading issues...</p>
+        </div>
+      </header>
+
+      <section class="filters" aria-label="Filters">
+        <label class="field search-field">
+          <span>Search</span>
+          <input id="searchInput" type="search" placeholder="Title, repo, label, issue number">
+        </label>
+
+        <fieldset class="segmented" aria-label="Good first issue filter">
+          <legend>Good First?</legend>
+          <label>
+            <input type="radio" name="goodFirst" value="all" checked>
+            <span>All</span>
+          </label>
+          <label>
+            <input type="radio" name="goodFirst" value="yes">
+            <span>Yes</span>
+          </label>
+          <label>
+            <input type="radio" name="goodFirst" value="no">
+            <span>No</span>
+          </label>
+        </fieldset>
+
+        <label class="field">
+          <span>Repository</span>
+          <select id="repoSelect">
+            <option value="">All repositories</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Sort</span>
+          <select id="sortSelect">
+            <option value="good-new">Good first, newest</option>
+            <option value="new">Newest</option>
+            <option value="comments-desc">Comments high to low</option>
+            <option value="comments-asc">Comments low to high</option>
+            <option value="repo">Repository</option>
+          </select>
+        </label>
+      </section>
+
+      <section class="tag-tools" aria-label="Tag filters">
+        <div class="tag-picker">
+          <label class="field">
+            <span>Include Tag</span>
+            <select id="includeSelect">
+              <option value="">Choose tag</option>
+            </select>
+          </label>
+          <div id="includeChips" class="chips" aria-live="polite"></div>
+        </div>
+
+        <div class="tag-picker">
+          <label class="field">
+            <span>Exclude Tag</span>
+            <select id="excludeSelect">
+              <option value="">Choose tag</option>
+            </select>
+          </label>
+          <div id="excludeChips" class="chips" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <section class="table-wrap" aria-label="Issues">
+        <table>
+          <thead>
+            <tr>
+              <th>Issue</th>
+              <th>Repo</th>
+              <th>Good First</th>
+              <th>Created</th>
+              <th>Comments</th>
+              <th>Tags</th>
+            </tr>
+          </thead>
+          <tbody id="issuesBody"></tbody>
+        </table>
+        <div id="emptyState" class="empty" hidden>No issues match these filters.</div>
+      </section>
+    </main>
+
+    <script src="issues.js"></script>
+  </body>
+</html>
